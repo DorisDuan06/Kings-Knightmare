@@ -1,7 +1,7 @@
 # Kings-Knightmare
 This project implements a modified chess problem. We have a modified chessboard that is size n × m. On the chessboard is a white king, a black knight, and several obstacles. Once the game starts, the knight can make a possibly infinite number of moves, and the king does not move. The goal is to find a path for the knight to capture the king, while avoiding all obstacles.
 A state will be represented by the current coordinates of the knight, (x, y). The possible moves of a knight are shown in the figure below by the 8 positions containing dark circles. Use the upper-left corner of the map as the origin, with coordinates (0, 0). When expanding a node to create its children nodes, each child’s position is computed from the current state’s position by: (+2, +1), (+1, +2), (-1, +2), (-2, +1), (-2, -1), (-1, -2), (+1, -2), (+2, -1); these positions are numbered, respectively, 1-8 in figure below. The program uses this order for the children! Note that some of these moves may not be legal, i.e., when there is an obstacle at the destination position, or when the destination position is off the map. Note: it does not matter if the positions in-between the current position and destination position in a single move are obstacles.
-<div aling="center">
+<div align="center">
 <img src="https://github.com/DorisDuan06/Kings-Knightmare/blob/master/chessboard.jpg" />
 </div>
 
