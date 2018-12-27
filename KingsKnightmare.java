@@ -1,16 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.Stack;
 
 /**
- * @author abhanshu 
+ * @author Yanjia Duan 
  * This class is a template for implementation of 
  * HW1 for CS540 section 2
  */
@@ -105,7 +101,6 @@ public class KingsKnightmare {
 	 * Implementation of Astar algorithm for the problem
 	 */
 	private static void executeAStar() {
-		//TODO: Implement A* algorithm in this method
 		int expand = 0, i, j;
 		PriorityQ<Location> priorityQ = new PriorityQ<Location>();
 		boolean[][] explored = new boolean[n][m];
@@ -114,54 +109,54 @@ public class KingsKnightmare {
 		int dir[][] = {{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2},{2,-1}};
 		int[][] path;
 		Location node = knight, child;
-		for(i = 0; i < n; i++)
-			for(j = 0; j < m; j++)
+		for (i = 0; i < n; i++)
+			for (j = 0; j < m; j++)
 				score[i][j] = h[i][j] = Math.abs(i-king.getY()) + Math.abs(j-king.getX());
 		priorityQ.add(knight,score[knight.getY()][knight.getX()]);
-		while(!king.equals(node)) {
-			if(priorityQ.isEmpty()) {
+		while (!king.equals(node)) {
+			if (priorityQ.isEmpty()) {
 				System.out.println("NOT REACHABLE");
-				System.out.println("Expanded Nodes: "+expand);
+				System.out.println("Expanded Nodes: " + expand);
 				break;
 			}
 			node = priorityQ.poll().getKey();
-			explored[node.getY()][node.getX()] = true;
 			
-			if(node.equals(king)) {
-				path = new int[expand+1][2];
-				for(j = expand; j > 0; j--) {
+			if (node.equals(king)) {
+				path = new int[expand + 1][2];
+				for (j = expand; j > 0; j--) {
 					path[j][0] = node.getX();
 					path[j][1] = node.getY();
 					node = node.getParent();
-					if(node==null)
+					if (node == null)
 						break;
 				}
 				path[j][0] = knight.getX();
 				path[j][1] = knight.getY();
-				for(; j <= expand; j++)
-					System.out.println(path[j][0]+" "+path[j][1]);
-				System.out.println("Expanded Nodes: "+expand);
+				for (; j <= expand; j++)
+					System.out.println(path[j][0] + " " + path[j][1]);
+				System.out.println("Expanded Nodes: " + expand);
 				break;
 			}
 			
-			expand++;
-			for(i = 0; i < 8; i++) {
-				child = new Location (node.getX()+dir[i][0], node.getY()+dir[i][1], node);
-				if(0 <= child.getX() && child.getX() < m && 0 <= child.getY() && child.getY() < n && !board[child.getY()][child.getX()]) {
-					if(!explored[child.getY()][child.getX()] && !Frontier[child.getY()][child.getX()]) {
+			for (i = 0; i < 8; i++) {
+				child = new Location(node.getX()+dir[i][0], node.getY()+dir[i][1], node);
+				if (0 <= child.getX() && child.getX() < m && 0 <= child.getY() && child.getY() < n && !board[child.getY()][child.getX()]) {
+					if (!explored[child.getY()][child.getX()] && !Frontier[child.getY()][child.getX()]) {
 						move[child.getY()][child.getX()] = move[node.getY()][node.getX()] + 3;
 						score[child.getY()][child.getX()] = h[child.getY()][child.getX()] + move[child.getY()][child.getX()];
 						Frontier[child.getY()][child.getX()] = true;
 						priorityQ.add(child, score[child.getY()][child.getX()]);
 					}
-					else if(h[child.getY()][child.getX()] + move[node.getY()][node.getX()] + 3 < score[child.getY()][child.getX()]) {
+					else if (h[child.getY()][child.getX()] + move[node.getY()][node.getX()] + 3 < score[child.getY()][child.getX()]) {
+						priorityQ.remove(child);
 						score[child.getY()][child.getX()] = h[child.getY()][child.getX()] + move[node.getY()][node.getX()] + 3;
 						priorityQ.add(child, score[child.getY()][child.getX()]);
 						Frontier[child.getY()][child.getX()] = true;
 					}
 				}
 			}
-			
+			explored[node.getY()][node.getX()] = true;
+			expand++;
 		}
 	}
 
@@ -169,7 +164,6 @@ public class KingsKnightmare {
 	 * Implementation of BFS algorithm
 	 */
 	private static void executeBFS() {
-		//TODO: Implement bfs algorithm in this method
 		int expand = 0, i, j;
 		Queue<Location> queue = new LinkedList<Location>();
 		boolean[][] explored = new boolean[n][m];
@@ -179,33 +173,33 @@ public class KingsKnightmare {
 		Location node = knight, child;
 		
 		queue.offer(knight);
-		while(!king.equals(node)) {
-			if(queue.isEmpty()) {
+		while (!king.equals(node)) {
+			if (queue.isEmpty()) {
 				System.out.println("NOT REACHABLE");
-				System.out.println("Expanded Nodes: "+expand);
+				System.out.println("Expanded Nodes: " + expand);
 				break;
 			}
 			node = (Location)queue.poll();
 			explored[node.getY()][node.getX()] = true;
 			expand++;
-			for(i = 0; i < 8; i++) {
+			for (i = 0; i < 8; i++) {
 				child = new Location (node.getX() + dir[i][0], node.getY() + dir[i][1], node);
 				if(0 <= child.getX() && child.getX() < m && 0 <= child.getY() && child.getY() < n && !board[child.getY()][child.getX()] && !explored[child.getY()][child.getX()] && !Frontier[child.getY()][child.getX()]) {
-					if(child.equals(king)) {
+					if (child.equals(king)) {
 						node = child;
 						path = new int[expand + 1][2];
-						for(j = expand; j > 0; j--) {
+						for (j = expand; j > 0; j--) {
 							path[j][0] = child.getX();
 							path[j][1] = child.getY();
 							child = child.getParent();
-							if(child == null)
+							if (child == null)
 								break;
 						}
 						path[j][0] = knight.getX();
 						path[j][1] = knight.getY();
-						for(; j <= expand; j++)
-							System.out.println(path[j][0]+" "+path[j][1]);
-						System.out.println("Expanded Nodes: "+expand);
+						for (; j <= expand; j++)
+							System.out.println(path[j][0] + " " + path[j][1]);
+						System.out.println("Expanded Nodes: " + expand);
 						break;
 					}
 					queue.offer(child);
@@ -217,10 +211,9 @@ public class KingsKnightmare {
 	}
 	
 	/**
-	 * Implemention of DFS algorithm
+	 * Implementation of DFS algorithm
 	 */
 	private static void executeDFS() {
-		//TODO: Implement dfs algorithm in this method
 		int expand = 0, i, j;
 		Stack<Location> st = new Stack<Location>();
 		boolean[][] explored = new boolean[n][m];
@@ -230,33 +223,33 @@ public class KingsKnightmare {
 		Location node = knight, child;
 		
 		st.push(knight);
-		while(!king.equals(node)) {
-			if(st.empty()) {
+		while (!king.equals(node)) {
+			if (st.empty()) {
 				System.out.println("NOT REACHABLE");
-				System.out.println("Expanded Nodes: "+expand);
+				System.out.println("Expanded Nodes: " + expand);
 				break;
 			}
 			node = (Location)st.pop();
 			explored[node.getY()][node.getX()] = true;
 			expand++;
-			for(i = 0; i < 8; i++) {
+			for (i = 0; i < 8; i++) {
 				child = new Location (node.getX() + dir[i][0], node.getY() + dir[i][1], node);
-				if(0 <= child.getX() && child.getX() < m && 0 <= child.getY() && child.getY() < n && !board[child.getY()][child.getX()] && !explored[child.getY()][child.getX()] && !Frontier[child.getY()][child.getX()]) {
-					if(child.equals(king)) {
+				if (0 <= child.getX() && child.getX() < m && 0 <= child.getY() && child.getY() < n && !board[child.getY()][child.getX()] && !explored[child.getY()][child.getX()] && !Frontier[child.getY()][child.getX()]) {
+					if (child.equals(king)) {
 						node = child;
 						path = new int[expand + 1][2];
-						for(j = expand; j > 0; j--) {
+						for (j = expand; j > 0; j--) {
 							path[j][0] = child.getX();
 							path[j][1] = child.getY();
 							child = child.getParent();
-							if(child == null)
+							if (child == null)
 								break;
 						}
 						path[j][0] = knight.getX();
 						path[j][1] = knight.getY();
-						for(; j <= expand; j++)
-							System.out.println(path[j][0]+" "+path[j][1]);
-						System.out.println("Expanded Nodes: "+expand);
+						for (; j <= expand; j++)
+							System.out.println(path[j][0] + " " + path[j][1]);
+						System.out.println("Expanded Nodes: " + expand);
 						break;
 					}
 					st.push(child);
